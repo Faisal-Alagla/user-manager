@@ -3,7 +3,7 @@ services:
   db:
     image: postgres:17.2
     environment:
-      POSTGRES_DB: task-manager
+      POSTGRES_DB: user-manager
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
     ports:
