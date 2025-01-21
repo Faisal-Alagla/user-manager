@@ -17,5 +17,5 @@ spring:
 user-manager:
   env: ${ENV:prod}
   openapi:
-    dev-url: ${OPENAPI_DEV_URL:http://localhost:8080}
-    prod-url: ${OPENAPI_PROD_URL:http://localhost:8080}
+    dev-url: ${OPENAPI_DEV_URL:http://localhost:8090}
+    prod-url: ${OPENAPI_PROD_URL:http://localhost:8090}

@@ -10,6 +10,9 @@ databaseChangeLog:
       relativeToChangelogFile: true
 
   # Constraints Setup
+  - include:
+      file: entities/user/user_group_id_fkey_20250121.yaml
+      relativeToChangelogFile: true
 
   # Seed Data
 
