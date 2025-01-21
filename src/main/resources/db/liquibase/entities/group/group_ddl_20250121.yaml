@@ -1,0 +1,42 @@
+databaseChangeLog:
+  - changeSet:
+      id: group_ddl_20250121
+      author: Faisal
+      changes:
+        - createTable:
+            tableName: group
+            columns:
+              - column:
+                  name: id
+                  type: UUID
+                  defaultValueComputed: gen_random_uuid()
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+                    primaryKeyName: group_pkey
+              - column:
+                  defaultValueComputed: now()
+                  name: created_at
+                  type: TIMESTAMP WITHOUT TIME ZONE
+              - column:
+                  name: created_by
+                  type: UUID
+              - column:
+                  name: updated_at
+                  type: TIMESTAMP WITHOUT TIME ZONE
+              - column:
+                  name: updated_by
+                  type: UUID
+              - column:
+                  name: name
+                  type: VARCHAR
+              - column:
+                  name: description
+                  type: VARCHAR
+              - column:
+                  name: group_image_url
+                  type: VARCHAR
+              - column:
+                  defaultValue: 'TRUE'
+                  name: is_active
+                  type: BOOLEAN

@@ -10,6 +10,7 @@ import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Entity
@@ -27,6 +28,9 @@ public class User extends BaseEntity {
     @Column(name = "last_name")
     private String lastName;
 
+    @Column(name = "date_of_birth")
+    private LocalDate dateOfBirth;
+
     @Column(name = "email")
     private String email;
 
@@ -34,7 +38,7 @@ public class User extends BaseEntity {
     private String phone;
 
     @Column(name = "role_id")
-    private UUID roleId;
+    private Integer roleId;
 
     @Column(name = "profile_image_url")
     private String profileImageUrl;

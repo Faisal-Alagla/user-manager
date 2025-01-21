@@ -6,11 +6,11 @@ spring:
     hibernate:
       ddl-auto: validate
     show-sql: false
-    datasource:
-      url: ${DB_URL:jdbc:postgresql://db:5432/user-manager}
-      username: ${DB_USERNAME:postgres}
-      password: ${DB_PASSWORD:postgres}
-    liquibase:
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://db:5432/user-manager}
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:postgres}
+  liquibase:
       contexts: ${ENV:prod}
       change-log: classpath:/db/liquibase/master.yaml
 

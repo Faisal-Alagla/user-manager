@@ -9,7 +9,7 @@ services:
     ports:
       - "5432:5432"
     networks:
-      - task-manager-network
+      - user-manager-network
   user-manager:
     build: .
     image: faisalagla/user-manager
@@ -21,7 +21,7 @@ services:
     ports:
       - "8090:8090"
     networks:
-      - task-manager-network
+      - user-manager-network
 networks:
-  task-manager-network:
+  user-manager-network:
     driver: "bridge"

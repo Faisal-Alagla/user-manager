@@ -1,0 +1,18 @@
+databaseChangeLog:
+  # Lookups Setup
+
+  # Tables Setup
+  - include:
+      file: entities/user/user_ddl_20250121.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: entities/group/group_ddl_20250121.yaml
+      relativeToChangelogFile: true
+
+  # Constraints Setup
+
+  # Seed Data
+
+  # Changelog
+
+  # Test Fixture

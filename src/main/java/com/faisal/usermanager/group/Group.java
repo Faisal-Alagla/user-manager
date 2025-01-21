@@ -13,7 +13,7 @@ import lombok.experimental.SuperBuilder;
 import java.util.UUID;
 
 @Entity
-@Table(name = "user")
+@Table(name = "group")
 @Getter
 @Setter
 @ToString
