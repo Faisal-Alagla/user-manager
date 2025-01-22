@@ -19,7 +19,7 @@ public class UserUpdateDto {
     private String email;
 
     //TODO: add phone format validation
-    //TODO: add phone exists (but not owner of it)  alidation
+    //TODO: add phone exists (but not owner of it) validation
     private String phone;
 
     //TODO: add role validation
