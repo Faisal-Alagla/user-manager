@@ -1,0 +1,34 @@
+package com.faisal.usermanager.user;
+
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.Email;
+import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.UUID;
+
+@Data
+@Schema(
+        name = "UserUpdateRequest",
+        description = "Schema to hold User information"
+)
+public class UserUpdateDto {
+
+    //TODO: add email exists (but not owner of it) validation
+    @Email(message = "email format is invalid")
+    private String email;
+
+    //TODO: add phone format validation
+    //TODO: add phone exists (but not owner of it)  alidation
+    private String phone;
+
+    //TODO: add role validation
+    private Integer roleId;
+
+    //TODO: add file type validation
+    private MultipartFile profileImage;
+
+    //TODO: add group exists validation (nullable = true)
+    private UUID groupId;
+
+}
