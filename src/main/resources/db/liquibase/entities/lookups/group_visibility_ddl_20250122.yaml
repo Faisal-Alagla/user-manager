@@ -1,0 +1,18 @@
+databaseChangeLog:
+  - changeSet:
+      id: group_visibility_ddl_20250122
+      author: Faisal
+      changes:
+        - createTable:
+            tableName: group_visibility_lk
+            columns:
+              - column:
+                  name: id
+                  type: INT
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+                    primaryKeyName: group_visibility_lk_pkey
+              - column:
+                  name: name
+                  type: VARCHAR

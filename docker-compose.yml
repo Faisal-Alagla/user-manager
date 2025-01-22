@@ -18,6 +18,7 @@ services:
       DB_URL: jdbc:postgresql://db:5432/user-manager
       DB_USERNAME: postgres
       DB_PASSWORD: postgres
+      SERVER.PORT: 8090
     ports:
       - "8090:8090"
     networks:

@@ -14,6 +14,9 @@ spring:
       contexts: ${ENV:prod}
       change-log: classpath:/db/liquibase/master.yaml
 
+server:
+  port: ${SERVER.PORT:8090}
+
 user-manager:
   env: ${ENV:prod}
   openapi:

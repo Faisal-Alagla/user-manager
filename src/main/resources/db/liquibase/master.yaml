@@ -1,5 +1,8 @@
 databaseChangeLog:
   # Lookups Setup
+  - include:
+      file: entities/lookups/group_visibility_ddl_20250122.yaml
+      relativeToChangelogFile: true
 
   # Tables Setup
   - include:
@@ -15,6 +18,9 @@ databaseChangeLog:
       relativeToChangelogFile: true
 
   # Seed Data
+  - include:
+      file: seed-data/setup.yaml
+      relativeToChangelogFile: true
 
   # Changelog
 

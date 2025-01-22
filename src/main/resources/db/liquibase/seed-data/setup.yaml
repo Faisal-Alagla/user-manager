@@ -1,0 +1,4 @@
+databaseChangeLog:
+  - include:
+      file: load_group_visibility_20250122.yaml
+      relativeToChangelogFile: true

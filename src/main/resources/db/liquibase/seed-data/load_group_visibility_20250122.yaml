@@ -1,0 +1,14 @@
+databaseChangeLog:
+  - changeSet:
+      id: load_group_visibility_20250122
+      author: Faisal
+      changes:
+        - loadData:
+            tableName: group_visibility_lk
+            columns:
+              - column:
+                  name: id
+              - column:
+                  name: name
+            file: classpath:db/liquibase/seed-data/data/group_visibility.csv
+            encoding: UTF-8
