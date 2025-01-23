@@ -49,7 +49,7 @@ public interface IGroupService {
     /**
      * Checks whether a Group exists and active
      *
-     * @param groupId id of the Group to be deleted
+     * @param groupId id of the Group to be checked
      * @return true if the group exists and active, false otherwise
      */
     boolean groupExists(UUID groupId);
