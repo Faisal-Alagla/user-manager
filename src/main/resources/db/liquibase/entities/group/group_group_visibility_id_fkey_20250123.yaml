@@ -1,0 +1,12 @@
+databaseChangeLog:
+  - changeSet:
+      id: group_group_visibility_id_fkey_20250123
+      author: Faisal
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: visibility_id
+            baseTableName: group
+            constraintName: group_group_visibility_id_fkey
+            onDelete: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: group_visibility_lk

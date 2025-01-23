@@ -3,6 +3,9 @@ databaseChangeLog:
   - include:
       file: entities/lookups/group_visibility_ddl_20250122.yaml
       relativeToChangelogFile: true
+  - include:
+      file: entities/lookups/user_group_role_ddl_20250123.yaml
+      relativeToChangelogFile: true
 
   # Tables Setup
   - include:
@@ -11,10 +14,22 @@ databaseChangeLog:
   - include:
       file: entities/group/group_ddl_20250121.yaml
       relativeToChangelogFile: true
+  - include:
+      file: entities/user-group/user_group_ddl_20250123.yaml
+      relativeToChangelogFile: true
 
   # Constraints Setup
   - include:
-      file: entities/user/user_group_id_fkey_20250121.yaml
+      file: entities/group/group_group_visibility_id_fkey_20250123.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: entities/user-group/group_user_id_fkey_20250123.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: entities/user-group/user_group_id_fkey_20250123.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: entities/user-group/user_group_user_group_role_id_fkey_20250123.yaml
       relativeToChangelogFile: true
 
   # Seed Data

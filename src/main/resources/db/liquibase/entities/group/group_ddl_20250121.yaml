@@ -37,9 +37,6 @@ databaseChangeLog:
                   name: group_image_url
                   type: VARCHAR
               - column:
-                  name: owner_id
-                  type: UUID
-              - column:
                   name: visibility_id
                   type: INT
               - column:

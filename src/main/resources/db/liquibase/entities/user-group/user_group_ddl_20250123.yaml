@@ -1,0 +1,27 @@
+databaseChangeLog:
+  - changeSet:
+      id: user_group_ddl_20250123
+      author: Faisal
+      changes:
+        - createTable:
+            tableName: user_group
+            columns:
+              - column:
+                  name: user_id
+                  type: UUID
+                  constraints:
+                    nullable: false
+              - column:
+                  name: group_id
+                  type: UUID
+                  constraints:
+                    nullable: false
+              - column:
+                  name: user_group_role_id
+                  type: INT
+                  constraints:
+                    nullable: false
+        - addPrimaryKey:
+            tableName: user_group
+            columnNames: user_id, group_id
+            constraintName: user_group_pkey

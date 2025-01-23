@@ -2,3 +2,6 @@ databaseChangeLog:
   - include:
       file: load_group_visibility_20250122.yaml
       relativeToChangelogFile: true
+  - include:
+      file: load_user_group_role_20250123.yaml
+      relativeToChangelogFile: true

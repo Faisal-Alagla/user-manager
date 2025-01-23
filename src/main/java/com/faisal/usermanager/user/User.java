@@ -43,7 +43,4 @@ public class User extends BaseEntity {
     @Column(name = "profile_image_url")
     private String profileImageUrl;
 
-    @Column(name = "group_id")
-    private UUID groupId;
-
 }

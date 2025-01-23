@@ -36,4 +36,15 @@ public class LookupController {
         return new ResponseEntity<>(groupVisibility, HttpStatus.OK);
     }
 
+    @Operation(
+            summary = "User Group Role Lookup",
+            description = "Get all lookups for user group role types"
+    )
+    @GetMapping("/user-group-role")
+    ResponseEntity<List<LookupResponseDto>> getUserGroupRoleLookup() {
+
+        List<LookupResponseDto> userGroupRole = lookupService.getLookup(LookupType.USER_GROUP_ROLE).toList();
+        return new ResponseEntity<>(userGroupRole, HttpStatus.OK);
+    }
+
 }

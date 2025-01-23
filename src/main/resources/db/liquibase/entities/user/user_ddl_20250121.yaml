@@ -49,9 +49,6 @@ databaseChangeLog:
                   name: profile_image_url
                   type: VARCHAR
               - column:
-                  name: group_id
-                  type: UUID
-              - column:
                   defaultValue: 'TRUE'
                   name: is_active
                   type: BOOLEAN

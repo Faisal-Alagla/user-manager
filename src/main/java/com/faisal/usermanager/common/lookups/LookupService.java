@@ -1,6 +1,7 @@
 package com.faisal.usermanager.common.lookups;
 
 import com.faisal.usermanager.common.lookups.entities.GroupVisibilityLk;
+import com.faisal.usermanager.common.lookups.entities.UserGroupRoleLk;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
@@ -21,6 +22,7 @@ public class LookupService {
     private final LookupRepository lookupRepository;
 
     private List<GroupVisibilityLk> groupVisibilityLookupList = List.of();
+    private List<UserGroupRoleLk> userGroupRoleLookupList = List.of();
 
     @Order(Ordered.HIGHEST_PRECEDENCE)
     @EventListener(ApplicationReadyEvent.class)
@@ -28,6 +30,7 @@ public class LookupService {
         log.info("filling lookup values");
 
         groupVisibilityLookupList = lookupRepository.getGroupVisibilityLookup();
+        userGroupRoleLookupList = lookupRepository.getUserGroupRoleLookup();
     }
 
     Stream<LookupResponseDto> getLookup(LookupType type) {
@@ -36,7 +39,9 @@ public class LookupService {
             case GROUP_VISIBILITY -> {
                 return groupVisibilityLookupList.stream().map(LookupResponseDto::fromEntity);
             }
-
+            case USER_GROUP_ROLE -> {
+                return userGroupRoleLookupList.stream().map(LookupResponseDto::fromEntity);
+            }
             default -> {
                 log.error("no values for the given lookup type");
                 return null;

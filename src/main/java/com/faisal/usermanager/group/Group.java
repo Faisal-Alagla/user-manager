@@ -30,9 +30,6 @@ public class Group extends BaseEntity {
     @Column(name = "group_image_url")
     private String groupImageUrl;
 
-    @Column(name = "owner_id")
-    private UUID ownerId;
-
     @Column(name = "visibility_id")
     private Integer visibilityId;
 

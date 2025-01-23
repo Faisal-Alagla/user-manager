@@ -1,0 +1,11 @@
+databaseChangeLog:
+  - changeSet:
+      id: group_user_id_fkey_20250123
+      author: Faisal
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: group_id
+            baseTableName: user_group
+            constraintName: group_user_id_fkey
+            referencedColumnNames: id
+            referencedTableName: group
