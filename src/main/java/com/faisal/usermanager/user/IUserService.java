@@ -8,15 +8,15 @@ import java.util.UUID;
 public interface IUserService {
 
     /**
-     * Creates a new User and store it in the DB
+     * Creates a new user
      *
-     * @param userCreationDto UserCreationDto object containing the User data to be created
-     * @return GroupResponseDto containing the created User data in the DB
+     * @param userCreationDto UserCreationDto object containing the user data to be created
+     * @return GroupResponseDto containing the created user data
      */
     UserResponseDto createUser(UserCreationDto userCreationDto);
 
     /**
-     * Get the User from the DB with the matching User id
+     * Get a user by id
      *
      * @param userId id of the user to be fetched
      * @return UserResponseDto object containing the fetched user data
@@ -24,32 +24,32 @@ public interface IUserService {
     UserResponseDto getUser(UUID userId);
 
     /**
-     * Gets all Users from the DB
+     * Get all active users (paginated)
      *
-     * @return a List<UserResponseDto> containing the users data
+     * @return a Page<UserResponseDto> containing the users data
      */
     Page<UserResponseDto> getAllUsers(Pageable pageable);
 
     /**
-     * Updates an existing User in the DB with the matching User id
+     * Update a user by id
      *
-     * @param userUpdateDto UserUpdateDto object containing the new updated user data
+     * @param userUpdateDto UserUpdateDto object containing the new user data
      * @param userId  id of the user to be updated
-     * @return GroupResponseDto object containing the updated User data
+     * @return GroupResponseDto object containing the updated user data
      */
     UserResponseDto updateUser(UserUpdateDto userUpdateDto, UUID userId);
 
     /**
-     * Soft deletes a User in the DB with the matching User id
+     * Soft delete a user by id
      *
-     * @param userId id of the User to be deleted
+     * @param userId id of the user to be deleted
      */
-    void deleteGroup(UUID userId);
+    void deleteUser(UUID userId);
 
     /**
-     * Checks whether a User exists and active
+     * Checks whether a user exists and active
      *
-     * @param userId id of the Group to be deleted
+     * @param userId id of the user to be deleted
      * @return true if the user exists and active, false otherwise
      */
     boolean userExists(UUID userId);
