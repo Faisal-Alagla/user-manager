@@ -16,6 +16,15 @@ public interface IGroupService {
     GroupResponseDto createGroup(GroupCreationDto groupCreationDto);
 
     /**
+     * Invites a user to a group
+     *
+     * @param groupId id of the target group
+     * @param userId id of the user to be invited
+     * @return GroupResponse containing the Group data
+     */
+    GroupResponseDto inviteUser(UUID groupId, UUID userId);
+
+    /**
      * Get the Group from the DB with the matching Group id
      *
      * @param groupId id of the group to be fetched
