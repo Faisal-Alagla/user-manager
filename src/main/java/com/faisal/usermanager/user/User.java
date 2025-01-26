@@ -11,7 +11,6 @@ import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDate;
-import java.util.UUID;
 
 @Entity
 @Table(name = "user")

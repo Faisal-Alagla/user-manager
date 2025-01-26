@@ -12,7 +12,7 @@ public enum ErrorMessage {
     INVALID_PATH(1_003, "Invalid path value"),
     MISSING_REQUEST_PARAMETER(1_004, "Required parameter is missing"),
     UNSUPPORTED_REQUEST_METHOD(1_005, "Request method is not supported"),
-    INVALID_API_USAGE(1_007, "Invalid API usage"),
+    INVALID_API_USAGE(1_006, "Invalid API usage"),
     DATA_INTEGRITY_VIOLATION_EXCEPTION(1_007, "Data integrity violation exception"),
 
     //user
@@ -24,6 +24,8 @@ public enum ErrorMessage {
     CONFLICT_GROUP_NAME_EXISTS(2_001, "Group name already exists"),
 
     //lookup
+    GROUP_VISIBILITY_NOT_FOUND(3_000, "Group visibility not found"),
+    USER_GROUP_ROLE_NOT_FOUND(3_001, "User group role not found"),
 
     //activity
 
