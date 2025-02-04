@@ -28,7 +28,4 @@ public class UserUpdateDto {
     //TODO: add file type validation
     private MultipartFile profileImage;
 
-    //TODO: add group exists validation (nullable = true)
-    private UUID groupId;
-
 }

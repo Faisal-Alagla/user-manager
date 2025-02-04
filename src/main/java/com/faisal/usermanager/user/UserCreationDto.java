@@ -8,7 +8,6 @@ import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
-import java.util.UUID;
 
 @Data
 @Schema(
@@ -41,8 +40,5 @@ public class UserCreationDto {
 
     //TODO: add file type validation
     private MultipartFile profileImage;
-
-    //TODO: add group exists validation (nullable = true)
-    private UUID groupId;
 
 }
