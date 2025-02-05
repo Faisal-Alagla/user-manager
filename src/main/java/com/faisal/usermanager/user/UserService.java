@@ -1,5 +1,7 @@
 package com.faisal.usermanager.user;
 
+import com.faisal.usermanager.common.exceptions.ErrorMessage;
+import com.faisal.usermanager.common.exceptions.ResourceException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,37 +19,59 @@ public class UserService implements IUserService {
     @Override
     @Transactional
     public UserResponseDto createUser(UserCreationDto userCreationDto) {
-        return null;
+        User createdUser = userRepository.save(UserMapper.mapToUser(userCreationDto));
+
+        return UserMapper.mapToUserResponseDto(createdUser);
     }
 
     @Override
     @Transactional(readOnly = true)
     public UserResponseDto getUser(UUID userId) {
-        return null;
+        User user = userRepository.findByIdAndIsActiveTrue(userId)
+                .orElseThrow(() -> new ResourceException(ErrorMessage.USER_NOT_FOUND));
+
+        return UserMapper.mapToUserResponseDto(user);
     }
 
     @Override
     @Transactional(readOnly = true)
     public Page<UserResponseDto> getAllUsers(Pageable pageable) {
-        return null;
+        return userRepository.findByIsActiveTrue(pageable).map(UserMapper::mapToUserResponseDto);
     }
 
     @Override
     @Transactional
     public UserResponseDto updateUser(UserUpdateDto userUpdateDto, UUID userId) {
-        return null;
+        User user = userRepository.findByIdAndIsActiveTrue(userId)
+                .orElseThrow(() -> new ResourceException(ErrorMessage.USER_NOT_FOUND));
+
+        updateUserData(user, userUpdateDto);
+        User updatedUser = userRepository.save(user);
+
+        return UserMapper.mapToUserResponseDto(updatedUser);
     }
 
     @Override
     @Transactional
     public void deleteUser(UUID userId) {
+        if (!userExists(userId)) {
+            throw new ResourceException(ErrorMessage.USER_NOT_FOUND);
+        }
 
+        userRepository.deactivateUser(userId);
     }
 
     @Override
     @Transactional(readOnly = true)
     public boolean userExists(UUID userId) {
-        return false;
+        return userRepository.findByIdAndIsActiveTrue(userId).isPresent();
+    }
+
+    private void updateUserData(User user, UserUpdateDto userUpdateDto) {
+        user.setEmail(userUpdateDto.getEmail()); //TODO: make sure to update in keycloak later
+        user.setPhone(userUpdateDto.getPhone());
+        user.setRoleId(userUpdateDto.getRoleId()); //TODO: check role comparison (higher can change lower)
+        //TODO: update image url
     }
 
 }
