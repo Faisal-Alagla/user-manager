@@ -29,6 +29,15 @@ public enum ErrorMessage {
 
     //activity
 
+    //object store
+    OBJECT_STORE_UPLOAD_FAILED(4_100, "Failed to upload to object store"),
+    OBJECT_STORE_GET_OBJECT_FAILED(4_101, "Failed to get object from object store"),
+    OBJECT_STORE_DELETE_FAILED(4_102, "Failed to delete object from object store"),
+    OBJECT_STORE_INIT_FAILED(4_103, "Failed to initialize object store client"),
+    OBJECT_STORE_STAT_FAILED(4_104, "Failed to get object statistics"),
+    OBJECT_STORE_INVALID_OBJECT_NAME(4_105, "Invalid object name provided"),
+    OBJECT_STORE_INVALID_FILE_CONTENT(4_106, "Invalid file content provided"),
+
     //general
     INTERNAL_SERVER_ERROR(5_000, "Internal Server Error");
 

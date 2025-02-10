@@ -22,3 +22,8 @@ user-manager:
   openapi:
     dev-url: ${OPENAPI_DEV_URL:http://localhost:8090}
     prod-url: ${OPENAPI_PROD_URL:http://localhost:8090}
+  object-store:
+    url: ${OBJECT_STORE_URL}
+    access-key: ${OBJECT_STORE_ACCESS_KEY}
+    access-secret: ${OBJECT_STORE_ACCESS_SECRET}
+    bucket-name: ${OBJECT_STORE_BUCKET_NAME}
