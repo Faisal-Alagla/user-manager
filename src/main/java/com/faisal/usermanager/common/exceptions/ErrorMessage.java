@@ -37,6 +37,7 @@ public enum ErrorMessage {
     OBJECT_STORE_STAT_FAILED(4_104, "Failed to get object statistics"),
     OBJECT_STORE_INVALID_OBJECT_NAME(4_105, "Invalid object name provided"),
     OBJECT_STORE_INVALID_FILE_CONTENT(4_106, "Invalid file content provided"),
+    OBJECT_STORE_BUCKET_CREATION_FAILED(4_107, "Failed to create bucket in object store"),
 
     //general
     INTERNAL_SERVER_ERROR(5_000, "Internal Server Error");

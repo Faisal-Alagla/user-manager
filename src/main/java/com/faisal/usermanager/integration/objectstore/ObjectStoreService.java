@@ -145,4 +145,24 @@ public class ObjectStoreService {
         });
     }
 
+    public void createBucketIfNotExists(String bucketName) {
+        try {
+            boolean bucketExists = minioClient.bucketExists(BucketExistsArgs.builder()
+                    .bucket(bucketName)
+                    .build());
+
+            if (!bucketExists) {
+                minioClient.makeBucket(MakeBucketArgs.builder()
+                        .bucket(bucketName)
+                        .build());
+                log.info("Bucket '{}' created successfully", bucketName);
+            } else {
+                log.info("Bucket '{}' already exists", bucketName);
+            }
+        } catch (Exception e) {
+            log.error("Failed to create bucket: {}", bucketName, e);
+            throw new ObjectStoreException(ErrorMessage.OBJECT_STORE_BUCKET_CREATION_FAILED);
+        }
+    }
+
 }
