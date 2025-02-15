@@ -8,8 +8,6 @@ services:
       POSTGRES_PASSWORD: postgres
     ports:
       - "5432:5432"
-    networks:
-      - user-manager-network
     healthcheck:
       test: [ "CMD-SHELL", "/usr/bin/pg_isready -U postgres -d user-manager -h localhost || exit 1" ]
       interval: 10s
@@ -29,8 +27,6 @@ services:
     volumes:
       - minio_data:/data
     command: server --console-address ":9001" /data
-    networks:
-      - user-manager-network
 
   user-manager:
     build: .
@@ -49,17 +45,11 @@ services:
       SERVER.PORT: 8090
     ports:
       - "8090:8090"
-    networks:
-      - user-manager-network
     depends_on:
       db:
         condition: service_healthy
       object-store:
         condition: service_started
-
-networks:
-  user-manager-network:
-    driver: "bridge"
 
 volumes:
   minio_data:
