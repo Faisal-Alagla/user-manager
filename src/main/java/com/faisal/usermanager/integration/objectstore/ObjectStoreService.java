@@ -22,13 +22,13 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class ObjectStoreService {
+public class ObjectStoreService implements IObjectStoreService {
 
     private final MinioClient minioClient;
 
     private final ObjectStoreConfig config;
 
-    public Pair<byte[], String> getFile(String objectName) {
+    public Pair<byte[], String> getObject(String objectName) {
         if (!StringUtils.hasText(objectName)) {
             throw new ObjectStoreException(ErrorMessage.OBJECT_STORE_INVALID_OBJECT_NAME);
         }
@@ -51,12 +51,12 @@ public class ObjectStoreService {
         }
     }
 
-    public void uploadFile(byte[] fileBuffer, String objectName, String contentType) {
+    public void uploadObject(byte[] objectBuffer, String objectName, String contentType) {
         if (!StringUtils.hasText(objectName)) {
             throw new ObjectStoreException(ErrorMessage.OBJECT_STORE_INVALID_OBJECT_NAME);
         }
 
-        if (fileBuffer == null || fileBuffer.length == 0) {
+        if (objectBuffer == null || objectBuffer.length == 0) {
             throw new ObjectStoreException(ErrorMessage.OBJECT_STORE_INVALID_FILE_CONTENT);
         }
 
@@ -66,7 +66,7 @@ public class ObjectStoreService {
                             .bucket(config.getBucketName())
                             .object(objectName)
                             .contentType(contentType)
-                            .stream(new ByteArrayInputStream(fileBuffer), fileBuffer.length, -1)
+                            .stream(new ByteArrayInputStream(objectBuffer), objectBuffer.length, -1)
                             .build()
             );
         } catch (Exception e) {
@@ -105,12 +105,12 @@ public class ObjectStoreService {
         }
     }
 
-    public CompletableFuture<List<String>> deleteFilesByPaths(List<String> filePaths) {
-        if (filePaths == null || filePaths.isEmpty()) {
+    public CompletableFuture<List<String>> deleteObjectsByPaths(List<String> objectPaths) {
+        if (objectPaths == null || objectPaths.isEmpty()) {
             return CompletableFuture.completedFuture(List.of());
         }
 
-        List<DeleteObject> objects = filePaths.stream()
+        List<DeleteObject> objects = objectPaths.stream()
                 .filter(StringUtils::hasText)
                 .map(DeleteObject::new)
                 .collect(Collectors.toList());
@@ -145,7 +145,7 @@ public class ObjectStoreService {
         });
     }
 
-    public void createBucketIfNotExists(String bucketName) {
+    void createBucketIfNotExists(String bucketName) {
         try {
             boolean bucketExists = minioClient.bucketExists(BucketExistsArgs.builder()
                     .bucket(bucketName)
