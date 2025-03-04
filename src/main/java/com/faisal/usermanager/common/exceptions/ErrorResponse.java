@@ -8,8 +8,13 @@ import java.util.Date;
 @Data
 @Builder
 class ErrorResponse {
+
     private Date timestamp;
+
     private Integer internalCode;
+
     private String message;
+
     private String description;
+
 }

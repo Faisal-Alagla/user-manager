@@ -3,41 +3,41 @@ package com.faisal.usermanager.integration.objectstore;
 import org.springframework.data.util.Pair;
 
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 
 public interface IObjectStoreService {
 
     /**
-     * Get an object from object store by its path/name
+     * Get an object from object store
      *
-     * @param objectName path/name of the object
-     * @return Pair of the object as an array of bytes (first), and its content type (second)
+     * @param objectPath path/name of the object
+     * @return operation result containing pair of object bytes and content type
      */
-    Pair<byte[], String> getObject(String objectName);
+    ObjectOperationResult<Pair<byte[], String>> getObject(String objectPath);
 
     /**
-     * upload an object to the object store
+     * Upload an object to the object store
      *
-     * @param objectBuffer The object as an array of bytes
-     * @param objectName The path/name of the object
-     * @param contentType The content type of the object
+     * @param objectBuffer object as a byte array
+     * @param objectPath path/name of the object
+     * @param contentType content type of the object
+     * @return operation result containing object metadata
      */
-    void uploadObject(byte[] objectBuffer, String objectName, String contentType);
+    ObjectOperationResult<ObjectMetadata> uploadObject(byte[] objectBuffer, String objectPath, String contentType);
 
     /**
-     * Checks whether an object exists by its path/name
+     * Delete a single object from object store
      *
-     * @param objectName path/name of the object
-     * @return true of the object exists, false otherwise
+     * @param objectPath path/name of the object to delete
+     * @return operation result indicating success or failure
      */
-    boolean doesObjectExist(String objectName);
+    ObjectOperationResult<Boolean> deleteObject(String objectPath);
 
     /**
-     * Delete multiple objects from object store by their paths/names
+     * Delete multiple objects from object store
      *
-     * @param objectPaths list of paths/names of the objects to delete
-     * @return CompletableFuture containing list of paths that failed to delete
+     * @param objectPaths list of object paths/names to delete
+     * @return operation result containing list of failed deletions
      */
-    CompletableFuture<List<String>> deleteObjectsByPaths(List<String> objectPaths);
+    ObjectOperationResult<List<String>> deleteObjects(List<String> objectPaths);
 
 }

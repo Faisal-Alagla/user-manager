@@ -30,6 +30,6 @@ public class UserResponseDto {
 
     private Integer roleId;
 
-    private MultipartFile profileImage;
+    private String profileImageBase64;
 
 }

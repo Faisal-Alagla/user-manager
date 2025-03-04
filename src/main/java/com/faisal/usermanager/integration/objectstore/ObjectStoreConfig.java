@@ -35,17 +35,12 @@ public class ObjectStoreConfig {
     @Bean
     public MinioClient minioClient() {
         try {
-            MinioClient client = MinioClient.builder()
+            return MinioClient.builder()
                     .endpoint(url)
                     .credentials(accessKey, accessSecret)
                     .build();
-
-            log.info("Testing MinIO connection...");
-            client.listBuckets();
-            log.info("Successfully connected to MinIO server");
-            return client;
         } catch (Exception e) {
-            log.error("Failed to initialize MinIO client. URL: {}, Error: {}", url, e.getMessage(), e);
+            log.error("Failed to create MinIO client", e);
             throw new ObjectStoreException(ErrorMessage.OBJECT_STORE_INIT_FAILED);
         }
     }

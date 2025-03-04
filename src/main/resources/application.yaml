@@ -27,5 +27,4 @@ user-manager:
     access-key: ${OBJECT_STORE_ACCESS_KEY}
     access-secret: ${OBJECT_STORE_ACCESS_SECRET}
     bucket-name: ${OBJECT_STORE_BUCKET_NAME}
-    max-retries: ${OBJECT_STORE_MAX_RETRIES:5}
-    retry-delay-ms: ${OBJECT_STORE_RETRY_DELAY_MS:2000}
+    profile-images-prefix: ${OBJECT_STORE_PROFILE_IMAGES_PREFIX:profile-images}
