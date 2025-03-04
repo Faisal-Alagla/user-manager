@@ -11,12 +11,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Base64;
 import java.util.UUID;
 
 @Slf4j
@@ -33,18 +35,18 @@ public class UserService implements IUserService {
     @Override
     @Transactional
     public UserResponseDto createUser(UserCreationDto userCreationDto) {
-        String profileImagePath = null;
-        MultipartFile profileImage = userCreationDto.getProfileImage();
-
-        if (profileImage != null && !profileImage.isEmpty()) {
-            profileImagePath = uploadProfileImage(profileImage);
-        }
-
         User newUser = UserMapper.mapToUser(userCreationDto);
-        newUser.setProfileImageUrl(profileImagePath);
         User createdUser = userRepository.save(newUser);
 
-        return UserMapper.mapToUserResponseDto(createdUser);
+        // Process profile image if provided
+        MultipartFile profileImage = userCreationDto.getProfileImage();
+        if (profileImage != null && !profileImage.isEmpty()) {
+            String profileImagePath = uploadProfileImage(profileImage, createdUser.getId());
+            createdUser.setProfileImageUrl(profileImagePath);
+            createdUser = userRepository.save(createdUser);
+        }
+
+        return mapToUserResponseDtoWithBase64Image(createdUser);
     }
 
     @Override
@@ -53,13 +55,14 @@ public class UserService implements IUserService {
         User user = userRepository.findByIdAndIsActiveTrue(userId)
                 .orElseThrow(() -> new ResourceException(ErrorMessage.USER_NOT_FOUND));
 
-        return UserMapper.mapToUserResponseDto(user);
+        return mapToUserResponseDtoWithBase64Image(user);
     }
 
     @Override
     @Transactional(readOnly = true)
     public Page<UserResponseDto> getAllUsers(Pageable pageable) {
-        return userRepository.findByIsActiveTrue(pageable).map(UserMapper::mapToUserResponseDto);
+        return userRepository.findByIsActiveTrue(pageable)
+                .map(this::mapToUserResponseDtoWithBase64Image);
     }
 
     @Override
@@ -68,23 +71,24 @@ public class UserService implements IUserService {
         User user = userRepository.findByIdAndIsActiveTrue(userId)
                 .orElseThrow(() -> new ResourceException(ErrorMessage.USER_NOT_FOUND));
 
-        String newProfileImagePath = null;
         MultipartFile profileImage = userUpdateDto.getProfileImage();
-
         if (profileImage != null && !profileImage.isEmpty()) {
-            // Delete existing profile image if there is one
+            // Delete existing profile image if exists
             if (StringUtils.hasText(user.getProfileImageUrl())) {
                 deleteProfileImage(user.getProfileImageUrl());
             }
 
             // Upload the new profile image
-            newProfileImagePath = uploadProfileImage(profileImage);
+            String newProfileImagePath = uploadProfileImage(profileImage, userId);
+            user.setProfileImageUrl(newProfileImagePath);
         }
 
-        updateUserData(user, userUpdateDto, newProfileImagePath);
-        User updatedUser = userRepository.save(user);
+        user.setEmail(userUpdateDto.getEmail()); //TODO: make sure to update in keycloak later
+        user.setPhone(userUpdateDto.getPhone());
+        user.setRoleId(userUpdateDto.getRoleId()); //TODO: check role comparison (higher can change lower)
 
-        return UserMapper.mapToUserResponseDto(updatedUser);
+        User updatedUser = userRepository.save(user);
+        return mapToUserResponseDtoWithBase64Image(updatedUser);
     }
 
     @Override
@@ -106,19 +110,9 @@ public class UserService implements IUserService {
         return userRepository.findByIdAndIsActiveTrue(userId).isPresent();
     }
 
-    private void updateUserData(User user, UserUpdateDto userUpdateDto, String newProfileImagePath) {
-        user.setEmail(userUpdateDto.getEmail()); //TODO: make sure to update in keycloak later
-        user.setPhone(userUpdateDto.getPhone());
-        user.setRoleId(userUpdateDto.getRoleId()); //TODO: check role comparison (higher can change lower)
-
-        if (StringUtils.hasText(newProfileImagePath)) {
-            user.setProfileImageUrl(newProfileImagePath);
-        }
-    }
-
-    private String uploadProfileImage(MultipartFile file) {
+    private String uploadProfileImage(MultipartFile file, UUID userId) {
         try {
-            String objectPath = generateProfileImagePath(file.getOriginalFilename());
+            String objectPath = generateProfileImagePath(file.getOriginalFilename(), userId);
 
             ObjectOperationResult<ObjectMetadata> result = objectStoreService.uploadObject(
                     file.getBytes(),
@@ -149,14 +143,50 @@ public class UserService implements IUserService {
         }
     }
 
-    private String generateProfileImagePath(String originalFilename) {
+    private String generateProfileImagePath(String originalFilename, UUID userId) {
         String extension = "";
         if (originalFilename != null && originalFilename.contains(".")) {
             extension = originalFilename.substring(originalFilename.lastIndexOf("."));
         }
 
         String sanitizedExtension = extension.replaceAll("[^a-zA-Z0-9.-]", "");
-        return String.format("%s/%s%s", profileImagesPrefix, UUID.randomUUID(), sanitizedExtension);
+        return String.format("%s/%s%s", profileImagesPrefix, userId, sanitizedExtension);
+    }
+
+    private UserResponseDto mapToUserResponseDtoWithBase64Image(User user) {
+        UserResponseDto dto = UserMapper.mapToUserResponseDto(user);
+
+        if (StringUtils.hasText(user.getProfileImageUrl())) {
+            String base64Image = getProfileImageAsBase64(user.getProfileImageUrl());
+            dto.setProfileImageBase64(base64Image);
+        }
+
+        return dto;
+    }
+
+    private String getProfileImageAsBase64(String imagePath) {
+        try {
+            ObjectOperationResult<Pair<byte[], String>> result = objectStoreService.getObject(imagePath);
+
+            if (!result.isSuccess()) {
+                log.error("Failed to get profile image: {}", result.getErrorMessage());
+                return null;
+            }
+
+            byte[] imageBytes = result.getData().getFirst();
+            String contentType = result.getData().getSecond();
+
+            if (imageBytes.length == 0) {
+                return null;
+            }
+
+            String base64Image = Base64.getEncoder().encodeToString(imageBytes);
+            return "data:" + contentType + ";base64," + base64Image;
+
+        } catch (Exception e) {
+            log.error("Error encoding profile image to base64", e);
+            return null;
+        }
     }
 
 }

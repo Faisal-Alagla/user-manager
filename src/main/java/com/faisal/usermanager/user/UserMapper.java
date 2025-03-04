@@ -17,8 +17,6 @@ public class UserMapper {
                 .email(user.getEmail())
                 .phone(user.getPhone())
                 .roleId(user.getRoleId())
-                // TODO: profile image is a placeholder, should be fetched from object store and converted to base64
-                .profileImageBase64(user.getProfileImageUrl())
                 .build();
     }
 
