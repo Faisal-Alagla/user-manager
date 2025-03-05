@@ -1,8 +1,5 @@
 package com.faisal.usermanager.user;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-
 import java.util.UUID;
 
 public interface IUserService {
@@ -22,13 +19,6 @@ public interface IUserService {
      * @return UserResponseDto object containing the fetched user data
      */
     UserResponseDto getUser(UUID userId);
-
-    /**
-     * Get all active users (paginated)
-     *
-     * @return a Page<UserResponseDto> containing the users data
-     */
-    Page<UserResponseDto> getAllUsers(Pageable pageable);
 
     /**
      * Update a user by id

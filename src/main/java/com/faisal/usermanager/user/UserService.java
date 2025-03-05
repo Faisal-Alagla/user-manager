@@ -9,8 +9,6 @@ import com.faisal.usermanager.integration.objectstore.ObjectOperationResult;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,7 +36,6 @@ public class UserService implements IUserService {
         User newUser = UserMapper.mapToUser(userCreationDto);
         User createdUser = userRepository.save(newUser);
 
-        // Process profile image if provided
         MultipartFile profileImage = userCreationDto.getProfileImage();
         if (profileImage != null && !profileImage.isEmpty()) {
             String profileImagePath = uploadProfileImage(profileImage, createdUser.getId());
@@ -56,13 +53,6 @@ public class UserService implements IUserService {
                 .orElseThrow(() -> new ResourceException(ErrorMessage.USER_NOT_FOUND));
 
         return mapToUserResponseDtoWithBase64Image(user);
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public Page<UserResponseDto> getAllUsers(Pageable pageable) {
-        return userRepository.findByIsActiveTrue(pageable)
-                .map(this::mapToUserResponseDtoWithBase64Image);
     }
 
     @Override
