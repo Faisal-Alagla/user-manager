@@ -8,4 +8,4 @@ databaseChangeLog:
             baseTableName: user_group
             constraintName: user_group_id_fkey
             referencedColumnNames: id
-            referencedTableName: user
+            referencedTableName: users

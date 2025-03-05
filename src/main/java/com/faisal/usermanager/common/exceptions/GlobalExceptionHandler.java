@@ -402,4 +402,94 @@ public class GlobalExceptionHandler {
         }
     }
 
+    /**
+     * Global exception handler for file upload exceptions
+     *
+     * @param ex
+     * @param request
+     * @return Exception - ErrorResponse with error message
+     */
+    @ExceptionHandler(FileUploadException.class)
+    private ResponseEntity<ErrorResponse> handleFileUploadException(FileUploadException ex, WebRequest request) {
+        log.error("file upload exception handler", ex);
+
+        ErrorResponse errorResponse = ErrorResponse
+                .builder()
+                .internalCode(ex.getErrorMessage().getInternalCode())
+                .message(ex.getErrorMessage().getMessage())
+                .timestamp(new Date())
+                .build();
+
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    /**
+     * Global exception handler for Spring's max upload size exceeded
+     *
+     * @param ex
+     * @param request
+     * @return Exception - ErrorResponse with error message
+     */
+    @ExceptionHandler(org.springframework.web.multipart.MaxUploadSizeExceededException.class)
+    private ResponseEntity<ErrorResponse> handleMaxUploadSizeExceededException(
+            org.springframework.web.multipart.MaxUploadSizeExceededException ex, WebRequest request) {
+        log.error("max upload size exceeded exception handler", ex);
+
+        ErrorResponse errorResponse = ErrorResponse
+                .builder()
+                .internalCode(ErrorMessage.FILE_SIZE_EXCEEDED.getInternalCode())
+                .message(ErrorMessage.FILE_SIZE_EXCEEDED.getMessage())
+                .description("The file size exceeds the maximum allowed upload size.")
+                .timestamp(new Date())
+                .build();
+
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    /**
+     * Global exception handler for media type not supported
+     *
+     * @param ex
+     * @param request
+     * @return Exception - ErrorResponse with error message
+     */
+    @ExceptionHandler(org.springframework.web.HttpMediaTypeNotSupportedException.class)
+    private ResponseEntity<ErrorResponse> handleHttpMediaTypeNotSupportedException(
+            org.springframework.web.HttpMediaTypeNotSupportedException ex, WebRequest request) {
+        log.error("media type not supported exception handler", ex);
+
+        ErrorResponse errorResponse = ErrorResponse
+                .builder()
+                .internalCode(ErrorMessage.UNSUPPORTED_FILE_TYPE.getInternalCode())
+                .message(ErrorMessage.UNSUPPORTED_FILE_TYPE.getMessage())
+                .description("The content type '" + ex.getContentType() + "' is not supported.")
+                .timestamp(new Date())
+                .build();
+
+        return new ResponseEntity<>(errorResponse, HttpStatus.UNSUPPORTED_MEDIA_TYPE);
+    }
+
+    /**
+     * Global exception handler for multipart exceptions
+     *
+     * @param ex
+     * @param request
+     * @return Exception - ErrorResponse with error message
+     */
+    @ExceptionHandler(org.springframework.web.multipart.MultipartException.class)
+    private ResponseEntity<ErrorResponse> handleMultipartException(
+            org.springframework.web.multipart.MultipartException ex, WebRequest request) {
+        log.error("multipart exception handler", ex);
+
+        ErrorResponse errorResponse = ErrorResponse
+                .builder()
+                .internalCode(ErrorMessage.FILE_UPLOAD_ERROR.getInternalCode())
+                .message(ErrorMessage.FILE_UPLOAD_ERROR.getMessage())
+                .description("Failed to process the multipart request: " + ex.getMessage())
+                .timestamp(new Date())
+                .build();
+
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+
 }

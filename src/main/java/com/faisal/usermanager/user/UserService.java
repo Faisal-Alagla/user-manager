@@ -16,6 +16,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.Base64;
 import java.util.UUID;
 
@@ -40,6 +41,7 @@ public class UserService implements IUserService {
         if (profileImage != null && !profileImage.isEmpty()) {
             String profileImagePath = uploadProfileImage(profileImage, createdUser.getId());
             createdUser.setProfileImageUrl(profileImagePath);
+            createdUser.setIsActive(true);
             createdUser = userRepository.save(createdUser);
         }
 
@@ -73,6 +75,7 @@ public class UserService implements IUserService {
             user.setProfileImageUrl(newProfileImagePath);
         }
 
+        user.setUpdatedAt(LocalDateTime.now());
         user.setEmail(userUpdateDto.getEmail()); //TODO: make sure to update in keycloak later
         user.setPhone(userUpdateDto.getPhone());
         user.setRoleId(userUpdateDto.getRoleId()); //TODO: check role comparison (higher can change lower)

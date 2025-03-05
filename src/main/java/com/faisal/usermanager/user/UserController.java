@@ -30,7 +30,7 @@ public class UserController {
             description = "Add a new user"
     )
     @PostMapping()
-    public ResponseEntity<UserResponseDto> createUser(@Valid @RequestBody UserCreationDto userCreationDto) {
+    public ResponseEntity<UserResponseDto> createUser(@Valid @ModelAttribute UserCreationDto userCreationDto) {
         UserResponseDto userResponseDto = iUserService.createUser(userCreationDto);
 
         return new ResponseEntity<>(userResponseDto, HttpStatus.CREATED);
@@ -54,7 +54,7 @@ public class UserController {
     @PutMapping("/{id}")
     public ResponseEntity<UserResponseDto> updateIssue(
             @PathVariable("id") UUID id,
-            @Valid @RequestBody UserUpdateDto userUpdateDto
+            @Valid @ModelAttribute UserUpdateDto userUpdateDto
     ) {
         UserResponseDto userResponseDto = iUserService.updateUser(userUpdateDto, id);
 

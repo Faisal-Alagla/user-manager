@@ -1,11 +1,10 @@
 package com.faisal.usermanager.user;
 
+import com.faisal.usermanager.utils.validations.ImageTypeValidation;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.util.UUID;
 
 @Data
 @Schema(
@@ -25,7 +24,7 @@ public class UserUpdateDto {
     //TODO: add role validation
     private Integer roleId;
 
-    //TODO: add file type validation
+    @ImageTypeValidation
     private MultipartFile profileImage;
 
 }

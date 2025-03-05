@@ -9,7 +9,7 @@ databaseChangeLog:
 
   # Tables Setup
   - include:
-      file: entities/user/user_ddl_20250121.yaml
+      file: entities/user/users_ddl_20250121.yaml
       relativeToChangelogFile: true
   - include:
       file: entities/group/group_ddl_20250121.yaml

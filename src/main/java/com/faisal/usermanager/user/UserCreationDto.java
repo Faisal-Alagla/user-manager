@@ -1,5 +1,6 @@
 package com.faisal.usermanager.user;
 
+import com.faisal.usermanager.utils.validations.ImageTypeValidation;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -38,7 +39,7 @@ public class UserCreationDto {
     //TODO: add role validation
     private Integer roleId;
 
-    //TODO: add file type validation
+    @ImageTypeValidation
     private MultipartFile profileImage;
 
 }

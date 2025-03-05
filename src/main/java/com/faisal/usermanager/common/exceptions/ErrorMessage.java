@@ -38,6 +38,11 @@ public enum ErrorMessage {
     OBJECT_STORE_INVALID_OBJECT_NAME(4_105, "Invalid object name provided"),
     OBJECT_STORE_INVALID_FILE_CONTENT(4_106, "Invalid file content provided"),
 
+    //file upload
+    FILE_SIZE_EXCEEDED(4_200, "Maximum allowed file size exceeded"),
+    FILE_UPLOAD_ERROR(4_202, "File upload error"),
+    UNSUPPORTED_FILE_TYPE(4_201, "Unsupported file type"),
+
     //general
     INTERNAL_SERVER_ERROR(5_000, "Internal Server Error");
 
