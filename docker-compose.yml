@@ -1,6 +1,6 @@
 version: '3'
 services:
-  db:
+  user-db:
     image: postgres:17.2
     environment:
       POSTGRES_DB: user-manager
@@ -8,8 +8,26 @@ services:
       POSTGRES_PASSWORD: postgres
     ports:
       - "5432:5432"
+    volumes:
+      - user_db_data:/var/lib/postgresql/data
     healthcheck:
       test: [ "CMD-SHELL", "/usr/bin/pg_isready -U postgres -d user-manager -h localhost || exit 1" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  keycloak-db:
+    image: postgres:17.2
+    environment:
+      POSTGRES_DB: keycloak
+      POSTGRES_USER: keycloak
+      POSTGRES_PASSWORD: keycloak
+    ports:
+      - "5433:5432"
+    volumes:
+      - keycloak_db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "/usr/bin/pg_isready -U keycloak -d keycloak -h localhost || exit 1" ]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -41,12 +59,30 @@ services:
         # Keep the container running
         wait
 
+  keycloak:
+    image: quay.io/keycloak/keycloak:26.2.5
+    environment:
+      KC_BOOTSTRAP_ADMIN_USERNAME: admin
+      KC_BOOTSTRAP_ADMIN_PASSWORD: admin
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://keycloak-db:5432/keycloak
+      KC_DB_USERNAME: keycloak
+      KC_DB_PASSWORD: keycloak
+      KC_HOSTNAME_STRICT: false #dev
+      KC_HOSTNAME_STRICT_HTTPS: false #dev
+    ports:
+      - '8081:8080'
+    command: [ "start-dev" ]
+    depends_on:
+      keycloak-db:
+        condition: service_healthy
+
   user-manager:
     build: .
     image: faisalagla/user-manager
     environment:
       ENV: dev
-      DB_URL: jdbc:postgresql://db:5432/user-manager
+      DB_URL: jdbc:postgresql://user-db:5432/user-manager
       DB_USERNAME: postgres
       DB_PASSWORD: postgres
       OBJECT_STORE_URL: http://object-store:9000
@@ -56,13 +92,16 @@ services:
       OBJECT_STORE_PROFILE_IMAGES_PREFIX: profile-images
       SERVER.PORT: 8090
     ports:
-      - "8090:8090"
+      - '8090:8090'
     depends_on:
-      db:
+      user-db:
         condition: service_healthy
       object-store:
+        condition: service_started
+      keycloak:
         condition: service_started
 
 volumes:
   minio_data:
-    driver: local
+  user_db_data:
+  keycloak_db_data:

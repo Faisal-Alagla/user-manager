@@ -132,7 +132,7 @@ public class UserService implements IUserService {
 
         ObjectOperationResult<Boolean> result = objectStoreService.deleteObject(imagePath);
         if (!result.isSuccess()) {
-            log.warn("Failed to delete profile image: {}", result.getErrorMessage());
+            log.error("Failed to delete profile image: {}", result.getErrorMessage());
         }
     }
 
