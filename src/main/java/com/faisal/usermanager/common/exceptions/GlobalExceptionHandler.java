@@ -492,4 +492,24 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
+    /**
+     * Global exception handler for forbidden actions
+     *
+     * @param ex      .
+     * @param request .
+     * @return Exception - ErrorResponse with forbidden error
+     */
+    @ExceptionHandler(ForbiddenException.class)
+    private ResponseEntity<ErrorResponse> handleForbiddenException(ForbiddenException ex, WebRequest request) {
+        log.error("forbidden exception handler", ex);
+
+        ErrorResponse errorResponse = ErrorResponse
+                .builder()
+                .internalCode(ex.getErrorMessage().getInternalCode())
+                .message(ex.getErrorMessage().getMessage())
+                .timestamp(new Date())
+                .build();
+        return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
+    }
+
 }

@@ -29,6 +29,14 @@ public enum ErrorMessage {
 
     //activity
 
+    //keycloak
+    KEYCLOAK_EMAIL_MESSAGE_FAILED(4_000, "Email message failed to be sent"),
+    KEYCLOAK_SERVICE_DOWN(4_001, "Keycloak service is down"),
+    KEYCLOAK_GENERAL_CONFLICT(4_002, "Item already exists"),
+    KEYCLOAK_FORBIDDEN_INTERNAL(4_003, "Forbidden"),
+    KEYCLOAK_USER_CREATION_FAILED(4_004, "Failed to create keycloak user"),
+    KEYCLOAK_USER_UPDATE_FAILED(4_005, "Failed to update keycloak user"),
+
     //object store
     OBJECT_STORE_UPLOAD_FAILED(4_100, "Failed to upload to object store"),
     OBJECT_STORE_GET_OBJECT_FAILED(4_101, "Failed to get object from object store"),
