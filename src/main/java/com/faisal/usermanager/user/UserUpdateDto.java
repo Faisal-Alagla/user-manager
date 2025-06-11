@@ -22,7 +22,7 @@ public class UserUpdateDto {
     private String phone;
 
     //TODO: add role validation
-    private Integer roleId;
+    private String roleId;
 
     @ImageTypeValidation
     private MultipartFile profileImage;

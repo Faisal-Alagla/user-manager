@@ -6,6 +6,9 @@ databaseChangeLog:
   - include:
       file: entities/lookups/user_group_role_ddl_20250123.yaml
       relativeToChangelogFile: true
+  - include:
+      file: entities/lookups/user_role_ddl_20250611.yaml
+      relativeToChangelogFile: true
 
   # Tables Setup
   - include:
@@ -30,6 +33,9 @@ databaseChangeLog:
       relativeToChangelogFile: true
   - include:
       file: entities/user-group/user_group_user_group_role_id_fkey_20250123.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: entities/user/user_user_role_id_fkey_20250611.yaml
       relativeToChangelogFile: true
 
   # Seed Data

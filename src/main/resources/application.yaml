@@ -13,6 +13,12 @@ spring:
   liquibase:
       contexts: ${ENV:prod}
       change-log: classpath:/db/liquibase/master.yaml
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${KEYCLOAK_ISSUER_URL}
+          audiences: backend
 
 springdoc:
   swagger-ui.enabled: ${ENABLE_SWAGGER:false}
@@ -31,7 +37,6 @@ user-manager:
     auth-server-url: ${KEYCLOAK_SERVER_URL}
     user-redirect-url: ${KEYCLOAK_USER_REDIRECT_URL}
     audience: ${KEYCLOAK_AUDIENCE:roles}
-    external-services-audience: ${KEYCLOAK_EXTERNAL_AUDIENCE}
   openapi:
     dev-url: ${OPENAPI_DEV_URL:http://localhost:8090}
     prod-url: ${OPENAPI_PROD_URL:http://localhost:8090}

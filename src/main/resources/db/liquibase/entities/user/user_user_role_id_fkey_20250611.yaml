@@ -1,0 +1,12 @@
+databaseChangeLog:
+  - changeSet:
+      id: user_user_role_id_fkey_20250611
+      author: Faisal
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: role_id
+            baseTableName: users
+            constraintName: user_user_role_id_fkey
+            onDelete: NO ACTION
+            referencedColumnNames: id
+            referencedTableName: user_role_lk

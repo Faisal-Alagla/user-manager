@@ -3,7 +3,6 @@ package com.faisal.usermanager.user;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Data;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.util.UUID;
@@ -28,7 +27,7 @@ public class UserResponseDto {
 
     private String phone;
 
-    private Integer roleId;
+    private String roleId;
 
     private String profileImageBase64;
 

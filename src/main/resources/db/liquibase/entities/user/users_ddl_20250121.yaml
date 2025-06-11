@@ -44,7 +44,7 @@ databaseChangeLog:
                   type: VARCHAR
               - column:
                   name: role_id
-                  type: INT
+                  type: VARCHAR
               - column:
                   name: profile_image_url
                   type: VARCHAR

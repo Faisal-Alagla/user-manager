@@ -22,17 +22,9 @@ public class KeycloakFeignClientConfiguration {
     @Value("${user-manager.keycloak.audience}")
     private String audience;
 
-    @Value("${user-manager.keycloak.external-services-audience}")
-    private String externalServicesAudience;
-
     @Bean
     public RequestInterceptor keycloakClientInterceptor() {
         return new KeycloakClientRequestInterceptor(new KeycloakAuth(clientId, clientSecret, realmName, authServerUrl, audience));
-    }
-
-    @Bean
-    public KeycloakAuth keycloakExternalAuth() {
-        return new KeycloakAuth(clientId, clientSecret, realmName, authServerUrl, externalServicesAudience);
     }
 
 }

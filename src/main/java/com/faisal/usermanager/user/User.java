@@ -37,7 +37,7 @@ public class User extends BaseEntity {
     private String phone;
 
     @Column(name = "role_id")
-    private Integer roleId;
+    private String roleId;
 
     @Column(name = "profile_image_url")
     private String profileImageUrl;

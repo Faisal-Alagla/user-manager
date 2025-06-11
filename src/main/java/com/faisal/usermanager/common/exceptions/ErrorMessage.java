@@ -21,11 +21,12 @@ public enum ErrorMessage {
 
     //group
     GROUP_NOT_FOUND(2_100, "Group not found"),
-    CONFLICT_GROUP_NAME_EXISTS(2_001, "Group name already exists"),
+    CONFLICT_GROUP_NAME_EXISTS(2_101, "Group name already exists"),
 
     //lookup
     GROUP_VISIBILITY_NOT_FOUND(3_000, "Group visibility not found"),
     USER_GROUP_ROLE_NOT_FOUND(3_001, "User group role not found"),
+    USER_ROLE_NOT_FOUND(3_002, "User role not found"),
 
     //activity
 
@@ -48,11 +49,12 @@ public enum ErrorMessage {
 
     //file upload
     FILE_SIZE_EXCEEDED(4_200, "Maximum allowed file size exceeded"),
-    FILE_UPLOAD_ERROR(4_202, "File upload error"),
-    UNSUPPORTED_FILE_TYPE(4_201, "Unsupported file type"),
+    FILE_UPLOAD_ERROR(4_201, "File upload error"),
+    UNSUPPORTED_FILE_TYPE(4_202, "Unsupported file type"),
 
     //general
-    INTERNAL_SERVER_ERROR(5_000, "Internal Server Error");
+    INTERNAL_SERVER_ERROR(5_000, "Internal Server Error"),
+    UNKNOWN_FEIGN_ERROR(5_001, "Unknown feign client error");
 
     private final Integer internalCode;
     private final String message;

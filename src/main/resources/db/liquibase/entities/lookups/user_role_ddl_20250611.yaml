@@ -1,0 +1,18 @@
+databaseChangeLog:
+  - changeSet:
+      id: user_role_ddl_20250611
+      author: Faisal
+      changes:
+        - createTable:
+            tableName: user_role_lk
+            columns:
+              - column:
+                  name: id
+                  type: VARCHAR
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+                    primaryKeyName: user_role_lk_pkey
+              - column:
+                  name: name
+                  type: VARCHAR

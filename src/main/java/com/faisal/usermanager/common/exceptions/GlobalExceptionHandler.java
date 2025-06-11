@@ -512,4 +512,66 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
     }
 
+    /**
+     * Global exception handler for email sending failures
+     *
+     * @param ex
+     * @param request
+     * @return Exception - ErrorResponse with service unavailable error
+     */
+    @ExceptionHandler(FailedEmailException.class)
+    private ResponseEntity<ErrorResponse> handleFailedEmailException(FailedEmailException ex, WebRequest request) {
+        log.error("failed sent email exception handler", ex);
+
+        ErrorResponse errorResponse = ErrorResponse
+                .builder()
+                .internalCode(ex.getErrorMessage().getInternalCode())
+                .message(ex.getErrorMessage().getMessage())
+                .timestamp(new Date())
+                .build();
+
+        return new ResponseEntity<>(errorResponse, HttpStatus.SERVICE_UNAVAILABLE);
+    }
+
+    /**
+     * Global exception handler for when a user is not found
+     *
+     * @param ex
+     * @param request
+     * @return Exception - ErrorResponse with not found error
+     */
+    @ExceptionHandler(UserNotFoundException.class)
+    private ResponseEntity<ErrorResponse> handleUserNotFoundException(UserNotFoundException ex, WebRequest request) {
+        log.error("user not found exception handler", ex);
+
+        ErrorResponse errorResponse = ErrorResponse
+                .builder()
+                .internalCode(ex.getErrorMessage().getInternalCode())
+                .message(ex.getErrorMessage().getMessage())
+                .timestamp(new Date())
+                .build();
+        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+    }
+
+    /**
+     * Global exception handler for when a role is not found
+     *
+     * @param ex
+     * @param request
+     * @return Exception - ErrorResponse with not found error
+     */
+    @ExceptionHandler(RoleNotFoundException.class)
+    private ResponseEntity<ErrorResponse> handleRoleNotFoundException(RoleNotFoundException ex, WebRequest request) {
+        log.error("role not found exception handler", ex);
+
+        ErrorResponse errorResponse = ErrorResponse
+                .builder()
+                .internalCode(ex.getErrorMessage().getInternalCode())
+                .message(ex.getErrorMessage().getMessage())
+                .timestamp(new Date())
+                .build();
+
+        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
+    }
+
 }
