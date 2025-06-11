@@ -70,12 +70,18 @@ services:
       KC_DB_PASSWORD: keycloak
       KC_HOSTNAME_STRICT: false #dev
       KC_HOSTNAME_STRICT_HTTPS: false #dev
+      KC_HEALTH_ENABLED: "true"
     ports:
-      - '8081:8080'
+      - '8443:8080'
     command: [ "start-dev" ]
     depends_on:
       keycloak-db:
         condition: service_healthy
+    healthcheck:
+      test: [ "CMD-SHELL", "timeout 5s bash -c '</dev/tcp/localhost/8080' || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
 
   user-manager:
     build: .
@@ -87,10 +93,10 @@ services:
       DB_PASSWORD: postgres
       KEYCLOAK_REALM_NAME: user-manager
       KEYCLOAK_CLIENT_ID: backend
-      KEYCLOAK_CLIENT_SECRET: 3yi99Gp0d5BrHBjOMJcjNbzSsBb3fclL
-      KEYCLOAK_SERVER_URL: http://keycloak:8081
-      KEYCLOAK_USER_REDIRECT_URL: http://localhost:8080/swagger-ui/index.html
-      KEYCLOAK_ISSUER_URL: http://keycloak:8081/realms/user-manager
+      KEYCLOAK_CLIENT_SECRET: AHEqeS39SUOwdVsyzE8rr7BnAvGVN1Ld
+      KEYCLOAK_SERVER_URL: http://keycloak:8080
+      KEYCLOAK_USER_REDIRECT_URL: http://localhost:8090/swagger-ui/index.html
+      KEYCLOAK_ISSUER_URL: http://keycloak:8080/realms/user-manager
       OBJECT_STORE_URL: http://object-store:9000
       OBJECT_STORE_ACCESS_KEY: minioadmin
       OBJECT_STORE_ACCESS_SECRET: minioadmin
@@ -105,7 +111,7 @@ services:
       object-store:
         condition: service_started
       keycloak:
-        condition: service_started
+        condition: service_healthy
 
 volumes:
   minio_data:
