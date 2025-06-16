@@ -56,9 +56,10 @@ public class UserService implements IUserService {
                     role
             );
         } catch (Exception e) {
+
+            // Rollback
             log.error("Error creating user in keycloak: {}", e.getMessage());
             userRepository.delete(createdUser);
-
             throw new InternalServerError(ErrorMessage.UNKNOWN_FEIGN_ERROR);
         }
 
@@ -67,9 +68,9 @@ public class UserService implements IUserService {
             try {
                 String profileImagePath = uploadProfileImage(profileImage, createdUser.getId());
                 createdUser.setProfileImageUrl(profileImagePath);
-                createdUser.setIsActive(true);
-                createdUser = userRepository.save(createdUser);
             } catch (ObjectStoreException e) {
+
+                // Rollback
                 try {
                     keycloakService.deleteUser(keycloakUserId);
                 } catch (Exception cleanupError) {
@@ -80,6 +81,9 @@ public class UserService implements IUserService {
                 throw e;
             }
         }
+
+        createdUser.setIsActive(true);
+        createdUser = userRepository.save(createdUser);
 
         return mapToUserResponseDtoWithBase64Image(createdUser);
     }
