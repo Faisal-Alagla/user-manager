@@ -214,7 +214,7 @@ public class KeycloakService {
      * @throws ForbiddenException    is thrown in case the client has no permissions to perform the current operation.
      * @throws UnknownFeignException when service unavailable or failing.
      */
-    private void deleteUser(String userId) throws ForbiddenException, UnknownFeignException {
+    public void deleteUser(String userId) throws ForbiddenException, UnknownFeignException {
 
         try {
             keycloakClient.deleteUser(realmName, userId);

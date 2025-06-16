@@ -1,8 +1,12 @@
 package com.faisal.usermanager.user;
 
 import com.faisal.usermanager.common.exceptions.ErrorMessage;
+import com.faisal.usermanager.common.exceptions.InternalServerError;
 import com.faisal.usermanager.common.exceptions.ObjectStoreException;
 import com.faisal.usermanager.common.exceptions.ResourceException;
+import com.faisal.usermanager.common.lookups.LookupService;
+import com.faisal.usermanager.common.lookups.LookupStringIdResponseDto;
+import com.faisal.usermanager.integration.keyclock.KeycloakService;
 import com.faisal.usermanager.integration.objectstore.IObjectStoreService;
 import com.faisal.usermanager.integration.objectstore.ObjectMetadata;
 import com.faisal.usermanager.integration.objectstore.ObjectOperationResult;
@@ -27,6 +31,8 @@ public class UserService implements IUserService {
 
     private final UserRepository userRepository;
     private final IObjectStoreService objectStoreService;
+    private final KeycloakService keycloakService;
+    private final LookupService lookupService;
 
     @Value("${user-manager.object-store.profile-images-prefix:profile-images}")
     private String profileImagesPrefix;
@@ -34,15 +40,45 @@ public class UserService implements IUserService {
     @Override
     @Transactional
     public UserResponseDto createUser(UserCreationDto userCreationDto) {
+        LookupStringIdResponseDto role = lookupService.findRoleLookupById(userCreationDto.getRoleId())
+                .orElseThrow(() -> new ResourceException(ErrorMessage.USER_ROLE_NOT_FOUND));
+
         User newUser = UserMapper.mapToUser(userCreationDto);
         User createdUser = userRepository.save(newUser);
 
+        String keycloakUserId;
+        try {
+            keycloakUserId = keycloakService.createUser(
+                    createdUser.getId().toString(),
+                    createdUser.getEmail(),
+                    createdUser.getFirstName(),
+                    createdUser.getLastName(),
+                    role
+            );
+        } catch (Exception e) {
+            log.error("Error creating user in keycloak: {}", e.getMessage());
+            userRepository.delete(createdUser);
+
+            throw new InternalServerError(ErrorMessage.UNKNOWN_FEIGN_ERROR);
+        }
+
         MultipartFile profileImage = userCreationDto.getProfileImage();
         if (profileImage != null && !profileImage.isEmpty()) {
-            String profileImagePath = uploadProfileImage(profileImage, createdUser.getId());
-            createdUser.setProfileImageUrl(profileImagePath);
-            createdUser.setIsActive(true);
-            createdUser = userRepository.save(createdUser);
+            try {
+                String profileImagePath = uploadProfileImage(profileImage, createdUser.getId());
+                createdUser.setProfileImageUrl(profileImagePath);
+                createdUser.setIsActive(true);
+                createdUser = userRepository.save(createdUser);
+            } catch (ObjectStoreException e) {
+                try {
+                    keycloakService.deleteUser(keycloakUserId);
+                } catch (Exception cleanupError) {
+                    log.error("Failed to cleanup Keycloak user after object store failure", cleanupError);
+                }
+
+                userRepository.delete(createdUser);
+                throw e;
+            }
         }
 
         return mapToUserResponseDtoWithBase64Image(createdUser);
