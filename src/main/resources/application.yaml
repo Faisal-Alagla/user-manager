@@ -18,7 +18,8 @@ spring:
       resourceserver:
         jwt:
           issuer-uri: ${KEYCLOAK_ISSUER_URL}
-          audiences: backend
+          audiences: backend-ms, account
+          jwk-set-uri: ${KEYCLOAK_JWK_URL}
 
 springdoc:
   swagger-ui.enabled: ${ENABLE_SWAGGER:false}

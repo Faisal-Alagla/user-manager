@@ -1,5 +1,6 @@
 package com.faisal.usermanager.user;
 
+import com.faisal.usermanager.common.security.SecurityConstants;
 import com.faisal.usermanager.utils.constants.BaseRoutingConstants;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -8,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,6 +32,7 @@ public class UserController {
             description = "Add a new user"
     )
     @PostMapping()
+    @PreAuthorize(SecurityConstants.AUTH_ADMIN)
     public ResponseEntity<UserResponseDto> createUser(@Valid @ModelAttribute UserCreationDto userCreationDto) {
         UserResponseDto userResponseDto = iUserService.createUser(userCreationDto);
 
@@ -41,6 +44,7 @@ public class UserController {
             description = "Get a specific user by user id"
     )
     @GetMapping("/{id}")
+    @PreAuthorize(SecurityConstants.AUTH_ADMIN_OR_USER)
     public ResponseEntity<UserResponseDto> getUser(@PathVariable("id") UUID id) {
         UserResponseDto userResponseDto = iUserService.getUser(id);
 
